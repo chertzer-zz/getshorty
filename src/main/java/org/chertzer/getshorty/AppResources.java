@@ -5,6 +5,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.chertzer.getshorty.util.URLStore;
 import org.slf4j.Logger;
 
 import java.net.URI;
@@ -13,13 +14,15 @@ import java.net.URISyntaxException;
 import static org.slf4j.LoggerFactory.*;
 
 /**
- * URL shortener resources
+ * URL shortener REST API
  * @author Cynthia Hertzer
  */
 @Path("/getshorty")
-public class AppResources {
+public final class AppResources {
     private static final Logger logger = getLogger(AppResources.class);
-    URLMap urls = URLMap.getInstance();
+    URLStore urls = URLMap.getInstance();
+
+    public AppResources(){}
 
     /**
      * Create a new random short URL.

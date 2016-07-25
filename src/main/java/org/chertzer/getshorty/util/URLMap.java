@@ -1,25 +1,25 @@
 package org.chertzer.getshorty.util;
 
 import java.util.concurrent.ConcurrentHashMap;
-import static org.chertzer.getshorty.util.Properties.*;
 
 /**
  * Manage the mapping of original URLs to shortened URLs
  */
 public final class URLMap implements URLStore {
-    private final int KEY_LENGTH = getIntProp("getshorty.URLMap.keyLength");
-    private final static ConcurrentHashMap<String, String> map = new ConcurrentHashMap();
+    // KEY_LENGTH = 8 provides for for 62^8 =218,340,105,584,896 unique keys
+    // Divide by 24*60*60*10,000 = 8,640,000 = daily rate if we get 10,000 hits/second ->
+    // Divide by 365 -> 953 years
+    private static final int KEY_LENGTH = 8;
+    private static final ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+    private static volatile URLMap INSTANCE = new URLMap();
 
     private URLMap(){}
 
-    private static class LazyInitURLMap {
-        private static final URLMap INSTANCE = new URLMap();
+    public static URLMap getInstance() {
+        return INSTANCE;
     }
 
-    public static URLMap getInstance() {
-        return LazyInitURLMap.INSTANCE;
-    }
-    private Base62IdGenerator gen = new Base62IdGenerator();
+    private static final Base62IdGenerator gen = new Base62IdGenerator();
 
     /**
      * Given a short URL key, lookup the original URL value

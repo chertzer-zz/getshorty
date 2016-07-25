@@ -1,22 +1,18 @@
 package org.chertzer.getshorty;
 
-import org.chertzer.getshorty.util.Properties;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
-import sun.rmi.runtime.Log;
 
-import static org.chertzer.getshorty.util.Properties.*;
 import static org.slf4j.LoggerFactory.getLogger;
-
 
 /**
  * Main app class. Starts a Jersey app with embetted Jetty server.
  */
 public class App {
-    private static final Properties props = new Properties();
     private static final Logger logger = getLogger(AppResources.class);
+    private static final int DEFAULT_PORT = 8080;
 
     private static void usage() {
         logger.error("Usage: App [customPort] " +
@@ -52,17 +48,30 @@ public class App {
         }
 
     }
+
+    /**
+     * Start the getshorty service on the provided port or port 8080, if no port is
+     * provided
+     * @param args 0 or 1 args are accepted. If one arg is provided it must be a number
+     *     > 1023 to avoid collisions or other problems having to do with reuse of
+     *     UNIX system ports.
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         App app = new App();
-        logger.info(" Got " + args.length); // TODO delete
         if (args.length > 2) {
             usage();
             System.exit(1);
         } else if (args.length == 2 ) {
-            //TODO check if the port is in a reasonable range
-            app.initServer(Integer.parseInt(args[1]));
+            int port = Integer.parseInt(args[1]);
+            logger.info("Port is " + port);
+            if (port <= 1023) {
+                throw new IllegalArgumentException("Cannot use a reserved system port.");
+            } else {
+                app.initServer(port);
+            }
         } else {
-            app.initServer(getIntProp("getshorty.port"));
+            app.initServer(DEFAULT_PORT);
         }
     }
 }
