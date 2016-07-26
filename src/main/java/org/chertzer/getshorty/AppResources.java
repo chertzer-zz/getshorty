@@ -52,7 +52,7 @@ public final class AppResources {
         return response;
     }
     /**
-     * Look up the originalURL that the given shortURL maps to
+     * Look up the originalURL that the given id maps to
      *
      * Example command-line usage:
      * curl http://localhost:8080/getshorty/&ltbase62-string-returned-from-link&gt
