@@ -1,5 +1,15 @@
 getshorty -- A URL shortener
 
+## Introduction
+My goal was to work within the "few hours" timebox to write a service that is functionally the same as  https://goo.gl/ for creation and lookup+redirect for links. 
+
+## Limitations/shortcuts:
+-Though goo.gl does this, I did not attempt to have a concept of users or associate links with users (potential enhancement). Due to time constraints and maven headaches, I didn't track any information about the link. Info like the IP address and the time that the link was created would be nice to have. 
+-Given the statement "in-memory storage is perfectly acceptable" and my assumption that this does not need to be HA/scalable across multiple servers, the service only uses a Java collection for the URLStore. Using some sort of distributed store with a combination of in-memory caching for fast lookups and persistence for HA/horizontal scaling/etc. would be better. 
+-Given the mention of "web framework",  I took the shortcut of using embedded Jetty/Jersey for REST APIs. REST APIs seem to serve this use case well. I used plain-text instead of JSON/XML for simplicity's sake since I didn't have much time and wasn't writing a client. 
+-I know your team has some great stuff for tracking requests and monitoring Netflix API services, but sadly that's also potential enhancement for this service. 
+-"Vanity plate"/custom short URLs are an obvious, useful extension. Doing something that Rick Rolls the client before it redirects to the real URL has probably already been done. 
+
 ## Usage
 
     ### Extract src
