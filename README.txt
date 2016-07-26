@@ -1,22 +1,24 @@
 getshorty -- A URL shortener
 
 ## Introduction
-My goal was to work within the "few hours" timebox to write a service that is functionally the same as  https://goo.gl/ for creation and lookup+redirect for links. 
+My goal was to work within the "few hours" timebox to write a service that is functionally the same as  https://goo.gl/ for creation and lookup+redirect for links. Background and usage notes follow.
 
 ## System Requirements: 
--I used Maven 3.3.9/Oracle Java 1.8.0_31 on OS/X 
+-I used Maven 3.3.9/Oracle Java 1.8.0_31 on OS/X. Hope maven will wrangle the remainder of the dependencies for you!
 
 ## Limitations/shortcuts:
 -Though goo.gl does this, I did not attempt to have a concept of users or associate links with users (potential enhancement). Due to time constraints and maven headaches, I didn't track any information about the link. Info like the IP address and the time that the link was created would be nice to have. 
 -Given the statement "in-memory storage is perfectly acceptable" and my assumption that this does not need to be HA/scalable across multiple servers, the service only uses a Java collection for the URLStore. Using some sort of distributed store with a combination of in-memory caching for fast lookups and persistence for HA/horizontal scaling/etc. would be better. 
--Given the mention of "web framework",  I took the shortcut of using embedded Jetty/Jersey for REST APIs. REST APIs seem to serve this use case well. I used plain-text instead of JSON/XML for simplicity's sake since I didn't have much time and wasn't writing a client. 
+-Given the mention of "web framework",  I took the shortcut of using embedded Jetty/Jersey for REST APIs. REST APIs seem to serve this use case well. I used plain-text instead of JSON/XML for simplicity's sake since I didn't have much time and wasn't writing a client.
+-I hardcoded properties that really should be extracted to a config management system, for example the KEY_LENGTH and the initial
+ config for the URLMap. I made the port configurable on the command line (see Usage notes below) since I felt it was important to make that easy to change.
 -I know your team has some great stuff for tracking requests and monitoring Netflix API services, but sadly that's also potential enhancement for this service. 
 -"Vanity plate"/custom short URLs are an obvious, useful extension. Doing something that Rick Rolls the client before it redirects to the real URL has probably already been done. 
 -Additional comments are in the code.
 
 ## Usage
-
-    ### Extract src
+   The following notes assume you've found this README in a getshorty directory which also contains the following:
+   META-INF/	pom.xml		src/
   
     ### Build
 
@@ -27,7 +29,7 @@ My goal was to work within the "few hours" timebox to write a service that is fu
   
     ### Run
 
-    Run from a jar, specify optional port
+    Run from the jar built by the above commands, specify optional port or the service will default to port 8080
 
 
       java  -jar target/getshorty-1.0-SNAPSHOT-jar-with-dependencies.jar org.chertzer.getshorty.App <port>
