@@ -26,11 +26,12 @@ public final class AppResources {
 
     /**
      * Create a new random short URL.
-     * Usage:
-     *  curl -X POST -H "Content-Type: text/plain; "http://google.com" http://localhost:8080/getshorty/link
-     * @return javax.ws.rs.core.Response HTTP 400 if input syntax is not a valid URL
-     *   javax.ws.rs.core.Response HTTP 200 and the shortURL text
+     * Example Usage:
+     *  curl -X POST -H "Content-Type: text/plain; "http://google.com" http://localhost:&ltport&gt/getshorty/link
      *
+     * @return javax.ws.rs.core.Response HTTP 400 if input syntax is not a valid URL
+     *   javax.ws.rs.core.Response HTTP 200 and the shortURL text upon successful link
+     *   creation
      */
     @POST
     @Path("link")
@@ -52,6 +53,9 @@ public final class AppResources {
     }
     /**
      * Look up the originalURL that the given shortURL maps to
+     *
+     * Example command-line usage:
+     * curl http://localhost:8080/getshorty/&ltbase62-string-returned-from-link&gt
      * @return Response with a 307 Redirect if successful
      */
     @GET
